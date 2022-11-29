@@ -2,6 +2,7 @@ class NewNode {
   constructor(value) {
     this.value = value;
     this.next = null;
+    // add previous: null
     this.previous = null;
   }
 }
@@ -9,6 +10,7 @@ class LinkedList {
   constructor(value) {
     this.head = {
       value: value,
+      // add prev.: null
       previous: null,
       next: null,
     };
@@ -18,10 +20,7 @@ class LinkedList {
 
   append(value) {
     const newNode = new NewNode(value);
-    // if (this.head === this.tail) {
-    //   this.tail.previous = this.head
-    // }
-    // this.tail.previous =
+
     newNode.previous = this.tail;
     // current tail
     this.tail.next = newNode;
@@ -32,6 +31,7 @@ class LinkedList {
   }
   prepend(value) {
     const newNode = new NewNode(value);
+    // change head.prev = newNode
     this.head.previous = newNode;
     newNode.next = this.head;
     this.head = newNode;
@@ -47,9 +47,9 @@ class LinkedList {
     }
     const newNode = new NewNode(value);
     const leader = this.traverseToIndex(index - 1);
-    const holdingNode = leader.next;
-    holdingNode.previous = newNode;
-    newNode.next = leader.next;
+    const follower = leader.next;
+    follower.previous = newNode;
+    newNode.next = follower;
     newNode.previous = leader;
     leader.next = newNode;
     this.length++;
@@ -74,7 +74,7 @@ class LinkedList {
       this.head = newHead;
       this.length--;
       return this.printList();
-    } else if (index > list.length) {
+    } else if (index >= list.length - 1) {
       index = this.length - 2;
       const leader = this.traverseToIndex(index);
       leader.next = null;
@@ -85,11 +85,33 @@ class LinkedList {
     const leader = this.traverseToIndex(index - 1);
     const deleteNode = leader.next;
     const newNext = deleteNode.next;
+    console.log(newNext);
     newNext.previous = leader;
     leader.next = deleteNode.next;
     this.length--;
 
     return this.printList();
+  }
+  reverse() {
+    if (!this.head.next) {
+      return this.head;
+    }
+
+    let first = this.head;
+    this.tail = this.head;
+    let second = first.next;
+
+    // loop through
+    while (second) {
+      const temp = second.next;
+
+      second.next = first;
+      first = second;
+      second = temp;
+    }
+    this.head.next = null;
+    this.head = first;
+    return this;
   }
   printList() {
     const array = [];
@@ -111,9 +133,10 @@ list.append(5);
 list.append(16);
 list.prepend(1);
 list.insert(2, 3);
-console.log(list.printList());
-// list.insert(9, 3);
-list.delete(2);
+// console.log(list.printList());
+list.insert(9, 3);
+list.reverse();
+// list.delete(0);
 
 console.log(list.printList());
 
