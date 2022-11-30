@@ -58,3 +58,5 @@ console.log(newMap);
 // .clear: clears the whole map
 newMap.clear();
 console.log(newMap);
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/forEach

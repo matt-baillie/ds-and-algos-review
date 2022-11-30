@@ -57,9 +57,62 @@ class BinarySearchTree {
     }
     return false;
   }
-  // remove(){
+  remove() {
+    if (!root) {
+      return false;
+    }
+    let currentNode = this.root;
+    let parentNode = null;
 
-  // }
+    while (currentNode) {
+      if (value < currentNode.value) {
+        parentNode = currentNode;
+        currentNode = currentNode.left;
+      } else if (value > currentNode.value) {
+        parentNode = currentNode;
+        currentNode = currentNode.right;
+      } else if (currentNode.value === value) {
+        // we get a match!! get to work!
+
+        // Option 1: No right child
+        if (currentNode.right === null) {
+          if (parentNode === null) {
+            this.root = currentNode.left;
+          } else {
+            // if parent > current.value, make parent.left child the current.left
+            if (currentNode.value < parentNode.value) {
+              parentNode.left = currentNode.left;
+
+              // if parent < current.value, make current.left the parent's right child
+            } else if (currentNode.value > parentNode.value) {
+              parentNode.right = currentNode.left;
+            }
+          }
+
+          // Option 2: Right child which doesn't have a left child
+        } else if (currentNode.right.left === null) {
+          if (parentNode === null) {
+            this.root = currentNode.left;
+          } else {
+            currentNode.right.left = currentNode.left;
+
+            // if parent> current, make current's right child the parent's left child
+            if (currentNode.value < parentNode.value) {
+              parentNode.left = currentNode.right;
+
+              // if parent < current, make current's right child the parent's right child
+            } else if (currentNode.value > parentNode.value) {
+              parentNode.right = currentNode.left;
+            }
+          }
+
+          // Option 3: Right child that has a left child
+        } else {
+        }
+      }
+    }
+    return false;
+  }
 }
 
 const tree = new BinarySearchTree();
