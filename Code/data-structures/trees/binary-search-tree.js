@@ -57,8 +57,8 @@ class BinarySearchTree {
     }
     return false;
   }
-  remove() {
-    if (!root) {
+  remove(value) {
+    if (!this.root) {
       return false;
     }
     let currentNode = this.root;
@@ -108,10 +108,33 @@ class BinarySearchTree {
 
           // Option 3: Right child that has a left child
         } else {
+          // find the Right child's left most child
+          let leftmost = currentNode.right.left;
+          let leftmostParent = currentNode.right;
+
+          while (leftmost.left !== null) {
+            leftmostParent = leftmost;
+            leftmost = leftmost.left;
+          }
+
+          // Parent's left subtree is now leftmost's right subtree
+          leftmostParent.left = leftmost.right;
+          leftmost.left = currentNode.left;
+          leftmost.right = currentNode.right;
+
+          if (parentNode === null) {
+            this.root = leftmost;
+          } else {
+            if (currentNode.value < parentNode.value) {
+              parentNode.left = leftmost;
+            } else if (currentNode.value > parentNode.value) {
+              parentNode.right = leftmost;
+            }
+          }
         }
+        return true;
       }
     }
-    return false;
   }
 }
 
@@ -127,6 +150,7 @@ console.log(tree.lookup(99));
 console.log(tree.lookup(50));
 console.log(tree.lookup(14));
 console.log(tree.lookup(10));
+tree.remove(32);
 
 console.log(JSON.stringify(traverse(tree.root)));
 
